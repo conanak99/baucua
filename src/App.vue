@@ -3,7 +3,7 @@
 <template>
 <div class="container">
   <div class="columns">
-    <div class="column is-10">
+    <div class="column is-9">
       <div>
         <h3>Xi ngau</h3>
 
@@ -12,7 +12,11 @@
 
       <div>
         <h3>Ban bau cua</h3>
-        <img src="./assets/baucua.jpg" alt="" class="image"/>
+        <div class="bc-table">
+          <img src="./assets/baucua.jpg" alt="" class="image"/>
+          <div class="bc-overlay"></div>
+        </div>
+        
       </div>
       
     </div>
@@ -57,6 +61,21 @@ export default {
 h1,
 h2 {
   font-weight: normal;
+}
+
+.bc-table {
+  position: relative;
+}
+
+.bc-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
 }
 
 ul {
