@@ -6,13 +6,14 @@
 
 <script>
 var allUrls = ["1-cop", "2-bau", "3-ga", "4-tom", "5-ca", "6-cua"];
+var requiredUrl = allUrls.map(url => require(`./assets/${url}.jpg`));
 
 export default {
   name: "dice",
   props: ["number"],
-  data() {
-    var url = require(`./assets/${allUrls[this.number - 1]}.jpg`);
-    return { url };
+  computed: {
+    url() { 
+      return requiredUrl[this.number]; }
   }
 };
 </script>

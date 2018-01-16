@@ -6,12 +6,12 @@
     <div class="column is-8">
       <div class="columns">
         <div class="column is-6">
-          <dice v-for="number in numbers" :number="number"></dice>
+          <dice v-for="number in dices" :number="number"></dice>
         </div>
         <div class="column is-6">
           Timer: 1
           <progress class="progress is-success" value="60" max="100">60%</progress>
-          <button class="button is-primary">Play</button>
+          <button @click="rollDice" class="button is-primary">Play</button>
         </div>
         
       </div>
@@ -72,13 +72,18 @@
 import Dice from "./dice.vue";
 import Token from "./token.vue";
 import Notification from "./notification.vue";
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   name: "app",
+  methods: {
+    ...mapMutations(['rollDice'])
+  },
+  computed : {
+    ...mapState(['dices'])
+  },
   data() {
     return {
-      numbers: [1, 2, 5],
-      msg: "Welcome to Your Vue.js App",
       allTokens: [
         [
           {
