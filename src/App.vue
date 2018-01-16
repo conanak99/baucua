@@ -6,7 +6,7 @@
     <div class="column is-8">
       <div class="columns">
         <div class="column is-6">
-          <dice v-for="number in dices" :number="number"></dice>
+          <dice v-for="(number, index) in dices" :key="index" :number="number"></dice>
         </div>
         <div class="column is-6">
           Timer: 1
