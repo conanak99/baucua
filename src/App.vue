@@ -11,7 +11,9 @@
         <div class="column is-6">
           Timer: 1
           <progress class="progress is-success" value="60" max="100">60%</progress>
-          <button @click="rollDice" class="button is-primary">Play</button>
+          <button @click="randomBet" class="button is-primary">Bet</button>
+          <button @click="playGame" class="button is-primary">Play</button> <br/>
+          <button @click="clearBoard" class="button is-primary">Restart</button>
         </div>
         
       </div>
@@ -20,8 +22,8 @@
         <div class="bc-table">
           <img src="./assets/baucua.jpg" alt="" class="image bc-image"/>
           <div class="bc-overlay">
-            <div class="tokens" v-for="tokens in allTokens">
-              <token v-for="token in tokens" :key="token.id" v-bind="token"></token>
+            <div class="tokens" v-for="(cell, key) in board">
+              <token v-for="token in cell" :key="token.id" v-bind="token"></token>
             </div>
           </div>
         </div>
@@ -44,11 +46,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr :key="player.id" v-for="player in leaderboards">
+            <tr :key="player.id" v-for="player in leaderboard">
               <td>{{player.id}}</td>
-              <td><img class="avatar" :src="player.imgUrl" /></td>
+              <td><img class="avatar" :src="player.avatar" /></td>
               <td>{{player.name}}</td>
-              <td>10</td>
+              <td>{{player.point}}</td>
             </tr>  
           </tbody> 
         </table>
@@ -58,7 +60,7 @@
         <h3 class="is-medium">Thông báo</h3>
 
         <div class="panel">
-          <notification :key="notification.name" 
+          <notification :key="notification.id" 
           v-for="notification in notifications" v-bind="notification" />
         </div>
       </div>
@@ -72,131 +74,20 @@
 import Dice from "./dice.vue";
 import Token from "./token.vue";
 import Notification from "./notification.vue";
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   name: "app",
   methods: {
-    ...mapMutations(['rollDice'])
+    ...mapMutations(['removeLosers', 'clearBoard']),
+    ...mapActions(['playGame', 'randomBet', 'restart'])
   },
   computed : {
-    ...mapState(['dices'])
+    ...mapState(['dices', 'players', 'board']),
+    ...mapGetters(['leaderboard', 'notifications'])
   },
   data() {
     return {
-      allTokens: [
-        [
-          {
-            id: 1,
-            name: "Harry",
-            point: 3,
-            imgUrl:
-              "https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png"
-          },
-          {
-            id: 2,
-            name: "Harry Won",
-            point: 10,
-            imgUrl:
-              "https://pickaface.net/gallery/avatar/62174948_180112_1525_2keep5a.png"
-          },
-          {
-            id: 3,
-            name: "Tran Thanh",
-            point: 20,
-            imgUrl:
-              "https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png"
-          },
-          {
-            id: 4,
-            name: "Lol",
-            point: 4,
-            imgUrl:
-              "https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png"
-          },
-          {
-            id: 5,
-            name: "Hai",
-            point: 1,
-            imgUrl:
-              "https://pickaface.net/gallery/avatar/unr_dudu_180112_1930_x93vb.png"
-          }
-        ],
-        [],
-        [],
-        [],
-        [],
-        []
-      ],
-      leaderboards: [
-        {
-          id: 1,
-          name: "Harry",
-          imgUrl:
-            "https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png"
-        },
-        {
-          id: 2,
-          name: "Harry Won",
-          imgUrl:
-            "https://pickaface.net/gallery/avatar/62174948_180112_1525_2keep5a.png"
-        },
-        {
-          id: 3,
-          name: "Tran Thanh",
-          imgUrl:
-            "https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png"
-        },
-        {
-          id: 4,
-          name: "Lol",
-          imgUrl:
-            "https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png"
-        },
-        {
-          id: 5,
-          name: "Hai",
-          imgUrl:
-            "https://pickaface.net/gallery/avatar/unr_dudu_180112_1930_x93vb.png"
-        }
-      ],
-      notifications: [
-        {
-          selection: "CUA",
-          name: "Harry",
-          point: 3,
-          imgUrl:
-            "https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png"
-        },
-        {
-          selection: "TOM",
-          name: "Harry Won",
-          point: 10,
-          imgUrl:
-            "https://pickaface.net/gallery/avatar/62174948_180112_1525_2keep5a.png"
-        },
-        {
-          selection: "NAI",
-          name: "Tran Thanh",
-          point: 20,
-          imgUrl:
-            "https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png"
-        },
-        {
-          selection: "COP",
-          name: "Lol",
-          point: 4,
-          imgUrl:
-            "https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png"
-        },
-        {
-          selection: "TOM",
-          name: "Hai",
-          point: 1,
-          imgUrl:
-            "https://pickaface.net/gallery/avatar/unr_dudu_180112_1930_x93vb.png"
-        }
-      ]
     };
   },
   components: {

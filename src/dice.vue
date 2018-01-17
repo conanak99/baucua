@@ -13,7 +13,7 @@ export default {
   props: ["number"],
   computed: {
     url() { 
-      return requiredUrl[this.number]; }
+      return requiredUrl[this.number - 1]; }
   }
 };
 </script>

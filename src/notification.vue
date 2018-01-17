@@ -1,8 +1,8 @@
 <template>
     <div class="panel-block">
-            <img class="mini avatar" :src="imgUrl" alt="" />
+            <img class="mini avatar" :src="player.avatar" alt="" />
             <span>
-              <b>{{name}}</b> đã đặt <b>{{point}} đồng {{selection}}</b>
+              <b>{{player.name}}</b> đã đặt <b>{{bet}} đồng {{choice}}</b>
             </span>
     </div>
 </template>
@@ -11,10 +11,9 @@
 export default {
   name: "notification",
   props: {
-    name: String,
-    imgUrl: String,
-    point: Number,
-    selection: String
+    player: Object,
+    bet: Number,
+    choice: String
   }
 };
 </script>

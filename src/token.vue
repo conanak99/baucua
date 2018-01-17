@@ -1,7 +1,7 @@
 <template>
     <div class="token" :style="style">
-        <span class="point">{{point}}</span>
-        <img :src="imgUrl" class="avatar"/>
+        <span class="point">{{bet}}</span>
+        <img :src="avatar" class="avatar"/>
     </div>
 </template>
 
@@ -15,8 +15,8 @@ export default {
   props: {
     id: Number,
     name: String,
-    imgUrl: String,
-    point: Number
+    avatar: String,
+    bet: Number
   },
   data() {
     return {
