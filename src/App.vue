@@ -1,21 +1,36 @@
-
-
 <template>
 <div class="container is-fullhd">
   <div class="columns">
     <div class="column is-8">
       <div class="columns">
-        <div class="column is-6">
+        <div class="column is-5">
           <dice v-for="(number, index) in dices" :key="index" :number="number"></dice>
         </div>
-        <div class="column is-6">
-          Timer: 1
-          <progress class="progress is-success" value="60" max="100">60%</progress>
-          <button @click="randomBet" class="button is-primary">Bet</button>
-          <button @click="playGame" class="button is-primary">Play</button> <br/>
-          <button @click="clearBoard" class="button is-primary">Restart</button>
+        <div class="column is-7 content">
+          <div>
+            <h3 class="is-medium">{{gameStatus}}</h3>
+          </div>
+          <div class="buttons">
+            <button @click="closeBet" class="button is-danger" :disabled="closeBetDisabled">
+              <span class="icon">
+                <i class="mdi mdi-close-box-outline"></i>
+              </span> &nbsp; ĐÓNG SÒNG
+            </button>
+            <button @click="playGame" class="button is-primary" :disabled="playGameDisabled">
+              <span class="icon">
+                <i class="mdi mdi-dice-multiple"></i>
+              </span> &nbsp; LẮC BẦU CUA
+            </button>
+            <button @click="restart" class="button is-warning" :disabled="clearBoardDisabled">
+              <span class="icon">
+                <i class="mdi mdi-cards-playing-outline"></i>
+              </span> &nbsp; MỞ SÒNG
+            </button>
+          </div>
+          <!-- 
+            <button @click="randomBet" class="button is-small is-primary">Random Bet</button>
+          -->    
         </div>
-        
       </div>
 
       <div>
@@ -23,7 +38,12 @@
           <img src="./assets/baucua.jpg" alt="" class="image bc-image"/>
           <div class="bc-overlay">
             <div class="tokens" v-for="(cell, key) in board">
-              <token v-for="token in cell" :key="token.id" v-bind="token"></token>
+              <transition-group tag="div"
+                  enter-active-class="animated bounceInDown"
+                  leave-active-class="animated fadeOutDown"
+               >
+                <token v-for="token in cell" :key="token.id" v-bind="token"></token>
+              </transition-group>
             </div>
           </div>
         </div>
@@ -32,8 +52,6 @@
       
     </div>
     <div class="column is-4">
-      <h1 class="title">Bầu cua cùng Code Dạo</h1>
-
       <div class="content">
         <h3 class="is-medium">Bảng xếp hạng</h3>
         <table class="table is-striped is-narrow">
@@ -74,21 +92,31 @@
 import Dice from "./dice.vue";
 import Token from "./token.vue";
 import Notification from "./notification.vue";
-import { mapMutations, mapActions, mapState, mapGetters } from 'vuex'
+import { mapMutations, mapActions, mapState, mapGetters } from "vuex";
+
+import { WAITING_FOR_BET, WAITING_FOR_ROLL, FINISHED } from './model/GameStatus';
 
 export default {
   name: "app",
   methods: {
-    ...mapMutations(['removeLosers', 'clearBoard']),
-    ...mapActions(['playGame', 'randomBet', 'restart'])
+    ...mapActions(["playGame", "closeBet", "randomBet", "restart"]),
+
   },
-  computed : {
-    ...mapState(['dices', 'players', 'board']),
-    ...mapGetters(['leaderboard', 'notifications'])
+  computed: {
+    ...mapState(["dices", "players", "board", "status"]),
+    ...mapGetters(["leaderboard", "notifications", "gameStatus"]),
+    closeBetDisabled() {
+      return this.status !== WAITING_FOR_BET;
+    },
+    playGameDisabled() {
+      return this.status !== WAITING_FOR_ROLL;
+    },
+    clearBoardDisabled() {
+      return this.status !== FINISHED;
+    }
   },
   data() {
-    return {
-    };
+    return {};
   },
   components: {
     dice: Dice,
@@ -108,8 +136,14 @@ export default {
   margin-top: 60px;
 }
 
+.buttons {
+  .button {
+    font-weight: bold;
+  }
+}
+
 h1,
-h2 {
+h2, h4 {
   font-weight: normal;
 }
 

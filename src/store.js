@@ -4,6 +4,7 @@ import createLogger from 'vuex/dist/logger';
 import Play from './play';
 import Player from './model/Player';
 import Notification from './model/Notification';
+import { WAITING_FOR_BET, WAITING_FOR_ROLL, FINISHED } from './model/GameStatus';
 
 var hoang = new Player(1, 'Hoang', 'https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png');
 var minh = new Player(2, 'Minh', 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png');
@@ -14,7 +15,7 @@ var play = new Play();
 const store = new Vuex.Store({
     state: {
         players: [],
-        status: 'Wait for bet', // Wait for bet, Finished
+        status: WAITING_FOR_BET,
         notifications: [],
         dices: [1, 2, 3],
         board: {
@@ -29,6 +30,9 @@ const store = new Vuex.Store({
     mutations: {
         updateDice: (state, dices) => {
             state.dices = dices;
+        },
+        changeStatus: (state, newStatus) => {
+            state.status = newStatus;
         },
         addPlayer: (state, player) => {
             state.players.push(player);
@@ -69,6 +73,9 @@ const store = new Vuex.Store({
             commit('updateDice', result);
         },
         placeBet({ commit, state }, { player, bet, choice }) {
+            // Can only bet when waiting for bet
+            if (state.status !== WAITING_FOR_BET) return;
+
             if (!state.players.some(p => p.id === player.id)) {
                 commit('addPlayer', player);
             }
@@ -88,6 +95,9 @@ const store = new Vuex.Store({
                 commit('updatePlayerPoint', { playerId: existedPlayer.id, changedValue: -bet });
                 commit('addNotification', new Notification(existedPlayer, bet, choice));
             }
+        },
+        closeBet({ commit }) {
+            commit('changeStatus', WAITING_FOR_ROLL);
         },
         finishGame({ commit, state }) {
             commit('removeLosers');
@@ -109,6 +119,7 @@ const store = new Vuex.Store({
                     commit('updatePlayerPoint', { playerId: winner.id, changedValue: winner.bet });
                 }
             }
+            commit('changeStatus', FINISHED);
         },
         randomBet({ dispatch }) {
             dispatch('placeBet', { player: hoang, bet: 5, choice: 1 })
@@ -122,6 +133,7 @@ const store = new Vuex.Store({
         },
         restart({ commit }) {
             commit('clearBoard');
+            commit('changeStatus', WAITING_FOR_BET);
         }
     },
     getters: {
@@ -131,6 +143,18 @@ const store = new Vuex.Store({
         },
         notifications: (state) => {
             return state.notifications.slice(0, 5);
+        },
+        gameStatus: (state) => {
+            switch (state.status) {
+                case WAITING_FOR_BET:
+                    return 'SÒNG ĐANG MỞ. Đặt đi bà con ơi!';
+                case WAITING_FOR_ROLL:
+                    return 'SÒNG ĐANG ĐÓNG. Chờ lắc bầu cua đê!';
+                case FINISHED:
+                    return 'LẮC XONG RỒI. Hốt tiền hốt tiền!';
+                default:
+                    return '';
+            }
         }
     },
     plugins: [createLogger()]
