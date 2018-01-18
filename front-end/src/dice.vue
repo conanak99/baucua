@@ -6,7 +6,7 @@
 
 <script>
 var allUrls = ["1-cop", "2-bau", "3-ga", "4-tom", "5-ca", "6-cua"];
-var requiredUrl = allUrls.map(url => require(`./assets/${url}.jpg`));
+var requiredUrl = allUrls.map(url => require(`./../assets/${url}.jpg`));
 
 export default {
   name: "dice",

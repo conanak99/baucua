@@ -1,0 +1,9 @@
+{
+  "name": "baucua-sciripts",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^4.8.2"
+  }
+}

@@ -64,7 +64,7 @@ const store = new Vuex.Store({
         },
         addNotification: (state, notification) => {
             notification.id = state.notifications.length;
-            state.notifications.push(notification);
+            state.notifications.unshift(notification);
         }
     },
     actions: {

@@ -11,3 +11,4 @@ yarn-error.log
 *.njsproj
 *.sln
 src/assets/firebase-config.json
+firebase-config.json

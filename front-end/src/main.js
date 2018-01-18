@@ -9,7 +9,7 @@ import Player from './model/Player';
 import store from './store';
 import "./styles/app.scss";
 
-import * as config from './assets/firebase-config.json';
+import * as config from './../../firebase-config.json';
 firebase.initializeApp(config);
 
 const database = firebase.database();

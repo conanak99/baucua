@@ -2,7 +2,7 @@ const firebase = require('firebase/app');
 require('firebase/auth');
 require('firebase/database');
 
-const config = require('./../src/assets/firebase-config.json');
+const config = require('./../firebase-config.json');
 firebase.initializeApp(config);
 
 const database = firebase.database();
@@ -24,10 +24,9 @@ var players = [
         betsRef.push(player);
         await wait(2);
     }
+    betsRef.remove();
+    console.log('Cleared');
 })();
-
-
-betsRef.set(null);
 
 function wait(second) {
     return new Promise(resolve => setTimeout(resolve, second * 1000));

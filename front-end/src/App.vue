@@ -35,7 +35,7 @@
 
       <div>
         <div class="bc-table">
-          <img src="./assets/baucua.jpg" alt="" class="image bc-image"/>
+          <img src="./../assets/baucua.jpg" alt="" class="image bc-image"/>
           <div class="bc-overlay">
             <div class="tokens" v-for="(cell, key) in board">
               <transition-group tag="div"
@@ -64,8 +64,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr :key="player.id" v-for="player in leaderboard">
-              <td>{{player.id}}</td>
+            <tr :key="player.id" v-for="(player, index) in leaderboard">
+              <td>{{index + 1}}</td>
               <td><img class="avatar" :src="player.avatar" /></td>
               <td>{{player.name}}</td>
               <td>{{player.point}}</td>
