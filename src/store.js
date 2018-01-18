@@ -6,9 +6,9 @@ import Player from './model/Player';
 import Notification from './model/Notification';
 import { WAITING_FOR_BET, WAITING_FOR_ROLL, FINISHED } from './model/GameStatus';
 
-var hoang = new Player(1, 'Hoang', 'https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png');
-var minh = new Player(2, 'Minh', 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png');
-var long = new Player(3, 'Long', 'https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png');
+const hoang = new Player(1, 'Hoang', 'https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png');
+const minh = new Player(2, 'Minh', 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png');
+const long = new Player(3, 'Long', 'https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png');
 
 Vue.use(Vuex);
 var play = new Play();
@@ -161,12 +161,4 @@ const store = new Vuex.Store({
 });
 
 window.store = store;
-// Dummy data first
-// Nen dung them JS notify toast
-
-store.dispatch('placeBet', { player: hoang, bet: 5, choice: 1 })
-store.dispatch('placeBet', { player: minh, bet: 2, choice: 3 })
-store.dispatch('placeBet', { player: minh, bet: 5, choice: 2 })
-store.dispatch('placeBet', { player: long, bet: 5, choice: 2 })
-
 export default store;
