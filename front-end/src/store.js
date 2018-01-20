@@ -17,7 +17,6 @@ const long = new Player('3', 'Long', 'https://pickaface.net/gallery/avatar/unr_b
 const diceRollSound = new Audio('./../assets/dice-roll.mp3');
 diceRollSound.volume = 1;
 
-
 Vue.use(Vuex);
 var play = new Play();
 const store = new Vuex.Store({
@@ -128,8 +127,11 @@ const store = new Vuex.Store({
             }
             commit('changeStatus', FINISHED);
 
-            firebase.update([...state.players]
-                .sort((p1, p2) => p2.point - p1.point));
+            // TODO: Filter for invalid name, avatar, id, point
+            const syncPlayer = [...state.player]
+                .filter(p => p.id && p.name && p.avatar)
+                .sort((p1, p2) => p2.point - p1.point);
+            firebase.set(syncPlayer);
         },
         randomBet({ dispatch }) {
             dispatch('placeBet', { player: hoang, bet: 5, choice: 1 })
@@ -159,7 +161,7 @@ const store = new Vuex.Store({
             return players.sort((p1, p2) => p2.point - p1.point).slice(0, 5);
         },
         notifications: (state) => {
-            return state.notifications.slice(0, 5);
+            return state.notifications.slice(0, 8);
         },
         gameStatus: (state) => {
             switch (state.status) {
