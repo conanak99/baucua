@@ -12,18 +12,27 @@ import "./styles/app.scss";
 import * as config from './../../firebase-config.json';
 import * as user from './../../firebase-user.json';
 
-firebase.initializeApp(config);
+// firebase.initializeApp(config);
+// firebase.auth().signInWithEmailAndPassword(user.email, user.password);
+// const database = firebase.database();
+// const betsRef = database.ref('bets');
 
-firebase.auth().signInWithEmailAndPassword(user.email, user.password);
+// betsRef.on('child_added', (snapshot) => {
+//     var child = snapshot.val();
+//     const { id, name, avatar, bet, choice } = child;
+//     const player = new Player(id, name, avatar);
+//     console.log(child);
+//     store.dispatch('placeBet', { player, bet, choice });
+// });
 
-const database = firebase.database();
-const betsRef = database.ref('bets');
+import io from 'socket.io-client';
+const socket = io('http://localhost:3002');
 
-betsRef.on('child_added', (snapshot) => {
-    var child = snapshot.val();
-    const { id, name, avatar, bet, choice } = child;
+socket.on('connect', () => { console.log('connected') });
+socket.on('newBet', function(newBet) {
+    const { id, name, avatar, bet, choice } = newBet;
     const player = new Player(id, name, avatar);
-    console.log(child);
+    console.log(newBet);
     store.dispatch('placeBet', { player, bet, choice });
 });
 

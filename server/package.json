@@ -4,21 +4,21 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "pm2 start index.js",
-        "pm": "pm2 start index.js",
-        "delete": "pm2 delete index",
+        "start": "node index.js",
+        "prod": "pm2 start index.js",
+        "stop-prod": "pm2 remove index",
         "deploy": "now --public",
         "test": "jest --verbose"
     },
     "dependencies": {
         "body-parser": "^1.18.2",
         "express": "^4.16.2",
-        "firebase": "^4.9.0",
         "jest": "^22.1.4",
         "jest-each": "^0.3.1",
         "morgan": "^1.9.0",
         "pm2": "^2.9.1",
         "request": "^2.83.0",
-        "request-promise": "^4.2.2"
+        "request-promise": "^4.2.2",
+        "socket.io": "^2.0.4"
     }
 }

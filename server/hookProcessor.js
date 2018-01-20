@@ -11,9 +11,9 @@ const choiceToNumberMap = {
 };
 
 class HookProcessor {
-    constructor(postId, firebaseRef) {
+    constructor(postId, emitter) {
         this.postId = postId;
-        this.firebaseRef = firebaseRef;
+        this.emitter = emitter;
     }
 
     async processHook(hookObject) {
@@ -48,7 +48,7 @@ class HookProcessor {
                 choice: bet.choice
             };
             console.log(playerAndBet);
-            this.firebaseRef.push(playerAndBet);
+            this.emitter.emit('newBet', playerAndBet);
         }
     }
 
