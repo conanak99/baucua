@@ -1,9 +1,9 @@
 <template>
     <div class="panel-block">
-            <img class="mini avatar" :src="player.avatar" alt="" />
-            <span>
-              <b>{{player.name}}</b> đã đặt <b>{{bet}} đồng {{choice}}</b>
-            </span>
+      <img class="mini avatar" :src="player.avatar" alt="" />
+      <span>
+        <b>{{player.name}}</b> đã đặt <b>{{bet}} đồng {{choice}}</b>
+      </span>
     </div>
 </template>
   

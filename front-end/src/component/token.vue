@@ -32,7 +32,7 @@ export default {
 
 <style scoped>
 .token {
-  animation-duration: 1.5s;
+  animation-duration: 1.2s;
   position: absolute;
 }
 

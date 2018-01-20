@@ -12,6 +12,10 @@ const hoang = new Player(1, 'Hoang', 'https://pickaface.net/gallery/avatar/unr_e
 const minh = new Player(2, 'Minh', 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png');
 const long = new Player(3, 'Long', 'https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png');
 
+const diceRollSound = new Audio('./../assets/dice-roll.mp3');
+diceRollSound.volume = 1;
+
+
 Vue.use(Vuex);
 var play = new Play();
 const store = new Vuex.Store({
@@ -72,7 +76,8 @@ const store = new Vuex.Store({
     actions: {
         async rollDice({ commit }) {
             commit('changeStatus', ROLLING);
-            await util.wait(4 * 1000);
+            diceRollSound.play();
+            await util.wait(3 * 1000);
 
             const result = play.getResult();
             commit('updateDice', result);
@@ -87,11 +92,6 @@ const store = new Vuex.Store({
             const existedPlayer = state.players.find(p => p.id === player.id);
             // Can not double bet
             if (state.board[choice].some(p => p.id === existedPlayer.id)) return;
-
-            // Bonus 1 token for player who bet but have zero
-            if (existedPlayer.point === 0) {
-                commit('updatePlayerPoint', { playerId: existedPlayer.id, changedValue: 1 });
-            }
 
             if (existedPlayer.point < bet) return;
 
@@ -136,8 +136,15 @@ const store = new Vuex.Store({
             await dispatch('rollDice');
             dispatch('finishGame');
         },
-        restart({ commit }) {
+        restart({ commit, state }) {
             commit('clearBoard');
+
+            // Bonus 2 point for lose users
+            for (const player of state.players) {
+                if (player.point === 0) {
+                    commit('updatePlayerPoint', { playerId: player.id, changedValue: 2 });
+                }
+            }
             commit('changeStatus', WAITING_FOR_BET);
         }
     },

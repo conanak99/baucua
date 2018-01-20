@@ -30,7 +30,10 @@
               </span> &nbsp; MỞ SÒNG
             </button>
           </div>
-            <!-- <button @click="randomBet" class="button is-small is-primary">Random Bet</button>     -->
+            <button @click="randomBet" 
+              class="button is-small is-primary">
+              Random Bet
+              </button>    
         </div>
       </div>
 
@@ -41,8 +44,7 @@
             <div class="boards" :key="key" v-for="(cell, key) in board">
               <transition-group tag="div"
                   enter-active-class="animated bounceInDown"
-                  leave-active-class="animated fadeOutDown"
-               >
+                  leave-active-class="animated fadeOutDown">
                 <token v-for="token in cell" :key="token.id" v-bind="token"></token>
               </transition-group>
             </div>
@@ -52,6 +54,20 @@
       </div>
     </div>
     <div class="column is-4">
+      <div class="content">
+        <h3 class="is-medium">Luật chơi (Vui là chính)</h3>
+        <ul>
+          <li>Mới chơi được tặng <b>20 đồng</b></li>
+          <li>Mỗi lần cháy túi sẽ được tặng <b>2 đồng</b> để gỡ gạc</li>
+          <li>
+            Đặt cược bằng cách <b>comment số lượng và lựa chọn</b>: <i>2 cua, 4 bầu, 3 cọp</i>
+          </li>
+          <li>Đặt rồi không được đặt lại (vì tui chưa code)</li>
+          <li>Tra số tiền tại <a href="baucua.toidicodedao.com">baucua.toidicodedao.com</a>
+          </li>
+        </ul>
+      </div>
+
       <div class="content">
         <h3 class="is-medium">Bảng xếp hạng</h3>
         <table class="table is-striped is-narrow">
@@ -63,25 +79,29 @@
               <th>Điểm</th>
             </tr>
           </thead>
-          <tbody>
+          <transition-group 
+             name="flip-list"
+             enter-active-class="animated slideInRight"
+             leave-active-class="animated slideOutRight"
+             tag="tbody">
             <tr :key="player.id" v-for="(player, index) in leaderboard">
               <td>{{index + 1}}</td>
               <td><img class="avatar" :src="player.avatar" /></td>
               <td>{{player.name}}</td>
               <td>{{player.point}}</td>
             </tr>  
-          </tbody> 
+          </transition-group> 
         </table>
       </div>
       
-      <div class="content">
+      <!-- <div class="content">
         <h3 class="is-medium">Thông báo</h3>
 
         <div class="panel">
           <notification :key="notification.id" 
           v-for="notification in notifications" v-bind="notification" />
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
@@ -139,6 +159,10 @@ export default {
   margin-top: 60px;
 }
 
+.flip-list-move {
+  transition: transform 1s;
+}
+
 .buttons {
   .button {
     font-weight: bold;
@@ -184,16 +208,6 @@ h2, h4 {
 
 .avatar {
   max-width: 35px;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
 }
 
 a {
