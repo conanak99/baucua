@@ -11,7 +11,8 @@
         </div>
         <div class="column is-7 content">
           <div>
-            <h3 class="is-medium">{{gameStatus}}</h3>
+            <h3 class="is-medium" :class="{'has-text-info': status === 'WAITING_FOR_BET'}">
+              {{gameStatus}}</h3>
           </div>
           <div class="buttons">
             <button @click="closeBet" class="button is-danger" :disabled="closeBetDisabled">

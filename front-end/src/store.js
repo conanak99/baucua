@@ -77,7 +77,7 @@ const store = new Vuex.Store({
         async rollDice({ commit }) {
             commit('changeStatus', ROLLING);
             diceRollSound.play();
-            await util.wait(3 * 1000);
+            await util.wait(2300);
 
             const result = play.getResult();
             commit('updateDice', result);

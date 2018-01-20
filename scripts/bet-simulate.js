@@ -1,12 +1,11 @@
-const firebase = require('firebase/app');
+const firebase = require('firebase');
 require('firebase/auth');
 require('firebase/database');
 
+const user = require('./../firebase-user');
+
 const config = require('./../firebase-config.json');
 firebase.initializeApp(config);
-
-const database = firebase.database();
-const betsRef = database.ref('bets');
 
 const hoang = { id: 1, name: 'Hoang', avatar: 'https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png' };
 const minh = { id: 2, name: 'Minh', avatar: 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png' };
@@ -19,6 +18,13 @@ var players = [
 ];
 
 (async() => {
+    console.log('begin to login');
+    await firebase.auth().signInWithEmailAndPassword(user.email, user.password);
+
+    const database = firebase.database();
+    const betsRef = database.ref('bets');
+
+    console.log('finished login');
     for (const player of players) {
         console.log('push', player);
         betsRef.push(player);
