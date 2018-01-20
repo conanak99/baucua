@@ -4,7 +4,10 @@
     <div class="column is-8">
       <div class="columns">
         <div class="column is-5">
-          <dice v-for="(number, index) in dices" :key="index" :number="number"></dice>
+          <dice v-for="(number, index) in dices" 
+          :key="index"
+          :isRolling="isDiceRolling" 
+          :number="number"></dice>
         </div>
         <div class="column is-7 content">
           <div>
@@ -27,9 +30,7 @@
               </span> &nbsp; MỞ SÒNG
             </button>
           </div>
-          <!-- 
-            <button @click="randomBet" class="button is-small is-primary">Random Bet</button>
-          -->    
+            <!-- <button @click="randomBet" class="button is-small is-primary">Random Bet</button>     -->
         </div>
       </div>
 
@@ -37,7 +38,7 @@
         <div class="bc-table">
           <img src="./../assets/baucua.jpg" alt="" class="image bc-image"/>
           <div class="bc-overlay">
-            <div class="tokens" v-for="(cell, key) in board">
+            <div class="boards" :key="key" v-for="(cell, key) in board">
               <transition-group tag="div"
                   enter-active-class="animated bounceInDown"
                   leave-active-class="animated fadeOutDown"
@@ -49,7 +50,6 @@
         </div>
         
       </div>
-      
     </div>
     <div class="column is-4">
       <div class="content">
@@ -89,12 +89,12 @@
 </template>
 
 <script>
-import Dice from "./dice.vue";
-import Token from "./token.vue";
-import Notification from "./notification.vue";
+import Dice from "./component/dice.vue";
+import Token from "./component/token.vue";
+import Notification from "./component/notification.vue";
 import { mapMutations, mapActions, mapState, mapGetters } from "vuex";
 
-import { WAITING_FOR_BET, WAITING_FOR_ROLL, FINISHED } from './model/GameStatus';
+import { WAITING_FOR_BET, ROLLING, WAITING_FOR_ROLL, FINISHED } from './model/GameStatus';
 
 export default {
   name: "app",
@@ -113,6 +113,9 @@ export default {
     },
     clearBoardDisabled() {
       return this.status !== FINISHED;
+    },
+    isDiceRolling() {
+      return this.status === ROLLING;
     }
   },
   data() {
@@ -160,14 +163,6 @@ h2, h4 {
   position: relative;
 }
 
-.notification {
-  padding: 0.5em;
-}
-
-.avatar {
-  max-width: 35px;
-}
-
 .bc-overlay {
   position: absolute;
   top: 0;
@@ -179,8 +174,16 @@ h2, h4 {
   grid-template-rows: 1fr 1fr;
 }
 
-.tokens {
+.boards {
   position: relative;
+}
+
+.notification {
+  padding: 0.5em;
+}
+
+.avatar {
+  max-width: 35px;
 }
 
 ul {

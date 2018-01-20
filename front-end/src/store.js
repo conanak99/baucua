@@ -1,10 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createLogger from 'vuex/dist/logger';
+
+import util from './util';
 import Play from './play';
 import Player from './model/Player';
 import Notification from './model/Notification';
-import { WAITING_FOR_BET, WAITING_FOR_ROLL, FINISHED } from './model/GameStatus';
+import { WAITING_FOR_BET, WAITING_FOR_ROLL, ROLLING, FINISHED } from './model/GameStatus';
 
 const hoang = new Player(1, 'Hoang', 'https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png');
 const minh = new Player(2, 'Minh', 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png');
@@ -68,7 +70,10 @@ const store = new Vuex.Store({
         }
     },
     actions: {
-        rollDice({ commit }) {
+        async rollDice({ commit }) {
+            commit('changeStatus', ROLLING);
+            await util.wait(4 * 1000);
+
             const result = play.getResult();
             commit('updateDice', result);
         },
@@ -127,8 +132,8 @@ const store = new Vuex.Store({
             dispatch('placeBet', { player: minh, bet: 5, choice: 2 })
             dispatch('placeBet', { player: long, bet: 5, choice: 2 })
         },
-        playGame({ dispatch }) {
-            dispatch('rollDice');
+        async playGame({ dispatch }) {
+            await dispatch('rollDice');
             dispatch('finishGame');
         },
         restart({ commit }) {
@@ -139,7 +144,7 @@ const store = new Vuex.Store({
     getters: {
         leaderboard: (state) => {
             var players = [...state.players];
-            return players.sort((p1, p2) => p2.point - p1.point);
+            return players.sort((p1, p2) => p2.point - p1.point).slice(0, 5);
         },
         notifications: (state) => {
             return state.notifications.slice(0, 5);
@@ -150,6 +155,8 @@ const store = new Vuex.Store({
                     return 'SÒNG ĐANG MỞ. Đặt đi bà con ơi!';
                 case WAITING_FOR_ROLL:
                     return 'SÒNG ĐANG ĐÓNG. Chờ lắc bầu cua đê!';
+                case ROLLING:
+                    return 'LẮC LẮC LẮC. Bầu cua tôm cá';
                 case FINISHED:
                     return 'LẮC XONG RỒI. Hốt tiền hốt tiền!';
                 default:
@@ -160,5 +167,4 @@ const store = new Vuex.Store({
     plugins: [createLogger()]
 });
 
-window.store = store;
 export default store;
