@@ -8,9 +8,9 @@ import Player from './model/Player';
 import Notification from './model/Notification';
 import { WAITING_FOR_BET, WAITING_FOR_ROLL, ROLLING, FINISHED } from './model/GameStatus';
 
-const hoang = new Player(1, 'Hoang', 'https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png');
-const minh = new Player(2, 'Minh', 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png');
-const long = new Player(3, 'Long', 'https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png');
+const hoang = new Player('1', 'Hoang', 'https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png');
+const minh = new Player('2', 'Minh', 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png');
+const long = new Player('3', 'Long', 'https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png');
 
 const diceRollSound = new Audio('./../assets/dice-roll.mp3');
 diceRollSound.volume = 1;

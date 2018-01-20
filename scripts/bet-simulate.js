@@ -4,12 +4,12 @@ require('firebase/database');
 
 const user = require('./../firebase-user');
 
-const config = require('./../firebase-config.json');
+const config = require('./../firebase-config');
 firebase.initializeApp(config);
 
-const hoang = { id: 1, name: 'Hoang', avatar: 'https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png' };
-const minh = { id: 2, name: 'Minh', avatar: 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png' };
-const long = { id: 3, name: 'Long', avatar: 'https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png' };
+const hoang = { id: '1', name: 'Hoang', avatar: 'https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png' };
+const minh = { id: '2', name: 'Minh', avatar: 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png' };
+const long = { id: '3', name: 'Long', avatar: 'https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png' };
 
 var players = [
     {...hoang, bet: 5, choice: 1 },

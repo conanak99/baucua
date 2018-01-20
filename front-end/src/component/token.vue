@@ -13,7 +13,7 @@ function getRandomInt(min, max) {
 export default {
   name: "token",
   props: {
-    id: Number,
+    id: String,
     name: String,
     avatar: String,
     bet: Number
@@ -48,6 +48,8 @@ export default {
   top: 35%;
   left: 35%;
   font-weight: bold;
-  text-shadow: 1px 1px white;
+  background: white;
+  padding: 4px 4px;
+  line-height: 10px;
 }
 </style>
