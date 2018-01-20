@@ -4,7 +4,7 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "node index.js",
+        "start": "node index.js NODE_ENV=production",
         "prod": "pm2 start index.js",
         "stop-prod": "pm2 remove index",
         "deploy": "now --public",
