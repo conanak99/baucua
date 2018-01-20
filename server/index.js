@@ -14,11 +14,20 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 
 const HookProcessor = require('./hookProcessor');
+const LoadTester = require('./loadTester');
 
 const process = new HookProcessor('116529085375415_566172007077785', io);
+const loadTester = new LoadTester(io);
 
 app.get('/', (req, res) => {
     res.send("Home page. Server running okay.");
+});
+
+// For load testing
+app.get('/load/:num', async(req, res) => {
+    const numberOfUser = parseInt(req.params.num, 10) || 1000;
+    await loadTester.runLoadTest(numberOfUser);
+    res.status(200).send("OK");
 });
 
 app.get('/webhook', function(req, res) {

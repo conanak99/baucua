@@ -3,7 +3,7 @@ class Player {
         this.id = id;
         this.name = name;
         this.avatar = avatar;
-        this.point = 10;
+        this.point = 20;
     }
 }
 

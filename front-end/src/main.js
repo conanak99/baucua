@@ -12,7 +12,6 @@ socket.on('connect', () => { console.log('connected') });
 socket.on('newBet', function(newBet) {
     const { id, name, avatar, bet, choice } = newBet;
     const player = new Player(id, name, avatar);
-    console.log(newBet);
     store.dispatch('placeBet', { player, bet, choice });
 });
 

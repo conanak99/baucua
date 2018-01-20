@@ -14,7 +14,7 @@ class Api {
             uri: url,
             qs: {
                 redirect: false,
-                type: 'large',
+                type: 'normal',
                 access_token: accessToken
             },
             json: true

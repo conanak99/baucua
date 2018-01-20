@@ -2,10 +2,11 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createLogger from 'vuex/dist/logger';
 
+import { countBy } from 'lodash';
+
 import util from './util';
 import Play from './play';
 import Player from './model/Player';
-import Notification from './model/Notification';
 import { WAITING_FOR_BET, WAITING_FOR_ROLL, ROLLING, FINISHED } from './model/GameStatus';
 
 import firebase from './firebase';
@@ -21,17 +22,16 @@ Vue.use(Vuex);
 var play = new Play();
 const store = new Vuex.Store({
     state: {
-        players: [],
+        players: {},
         status: WAITING_FOR_BET,
-        notifications: [],
         dices: [1, 2, 3],
         board: {
-            1: [],
-            2: [],
-            3: [],
-            4: [],
-            5: [],
-            6: []
+            1: {},
+            2: {},
+            3: {},
+            4: {},
+            5: {},
+            6: {}
         }
     },
     mutations: {
@@ -42,36 +42,33 @@ const store = new Vuex.Store({
             state.status = newStatus;
         },
         addPlayer: (state, player) => {
-            state.players.push(player);
+            Vue.set(state.players, player.id, player);
         },
         updatePlayerPoint: (state, { playerId, changedValue }) => {
-            const player = state.players.find(p => p.id === playerId);
-            player.point += changedValue;
+            const player = state.players[playerId];
+            if (player) player.point += changedValue;
         },
         placeBet: (state, { player, bet, choice }) => {
-            state.board[choice].push({
+            var token = {
                 id: player.id,
                 name: player.name,
                 avatar: player.avatar,
                 bet
-            });
+            };
+            Vue.set(state.board[choice], player.id, token);
         },
         removeLosers: (state) => {
             for (const key of Object.keys(state.board)) {
                 const keyInt = parseInt(key, 10);
                 if (!state.dices.includes(keyInt)) {
-                    state.board[key] = [];
+                    Vue.set(state.board, key, {});
                 }
             }
         },
         clearBoard: (state) => {
             for (const key of Object.keys(state.board)) {
-                state.board[key] = [];
+                Vue.set(state.board, key, {});
             }
-        },
-        addNotification: (state, notification) => {
-            notification.id = state.notifications.length;
-            state.notifications.unshift(notification);
         }
     },
     actions: {
@@ -87,19 +84,18 @@ const store = new Vuex.Store({
             // Can only bet when waiting for bet
             if (state.status !== WAITING_FOR_BET) return;
 
-            if (!state.players.some(p => p.id === player.id)) {
+            if (!state.players[player.id]) {
                 commit('addPlayer', player);
             }
-            const existedPlayer = state.players.find(p => p.id === player.id);
             // Can not double bet
-            if (state.board[choice].some(p => p.id === existedPlayer.id)) return;
+            if (state.board[choice][player.id]) return;
 
+            const existedPlayer = state.players[player.id];
             if (existedPlayer.point < bet) return;
 
             if (existedPlayer.point >= bet) {
                 commit('placeBet', { player: existedPlayer, bet, choice });
                 commit('updatePlayerPoint', { playerId: existedPlayer.id, changedValue: -bet });
-                commit('addNotification', new Notification(existedPlayer, bet, choice));
             }
         },
         closeBet({ commit }) {
@@ -108,27 +104,19 @@ const store = new Vuex.Store({
         finishGame({ commit, state }) {
             commit('removeLosers');
 
-            const dices = state.dices;
-            // Return bet money
-            var dicesDistinct = [...new Set(dices)];
-            for (const dice of dicesDistinct) {
-                const winners = state.board[dice];
+            var diceDic = countBy(state.dices, dice => dice);
+            for (const key in diceDic) {
+                const multiplier = diceDic[key] + 1;
+                const winners = Object.values(state.board[key]);
                 for (const winner of winners) {
-                    commit('updatePlayerPoint', { playerId: winner.id, changedValue: winner.bet });
+                    commit('updatePlayerPoint', { playerId: winner.id, changedValue: (winner.bet * multiplier) });
                 }
             }
 
-            // Add reward money
-            for (const dice of dices) {
-                const winners = state.board[dice];
-                for (const winner of winners) {
-                    commit('updatePlayerPoint', { playerId: winner.id, changedValue: winner.bet });
-                }
-            }
             commit('changeStatus', FINISHED);
 
             // TODO: Filter for invalid name, avatar, id, point
-            const syncPlayer = [...state.player]
+            const syncPlayer = Object.values(state.players)
                 .filter(p => p.id && p.name && p.avatar)
                 .sort((p1, p2) => p2.point - p1.point);
             firebase.set(syncPlayer);
@@ -147,7 +135,7 @@ const store = new Vuex.Store({
             commit('clearBoard');
 
             // Bonus 2 point for lose users
-            for (const player of state.players) {
+            for (const player of Object.values(state.players)) {
                 if (player.point === 0) {
                     commit('updatePlayerPoint', { playerId: player.id, changedValue: 2 });
                 }
@@ -157,11 +145,8 @@ const store = new Vuex.Store({
     },
     getters: {
         leaderboard: (state) => {
-            var players = [...state.players];
+            var players = Object.values(state.players);
             return players.sort((p1, p2) => p2.point - p1.point).slice(0, 5);
-        },
-        notifications: (state) => {
-            return state.notifications.slice(0, 8);
         },
         gameStatus: (state) => {
             switch (state.status) {
@@ -177,8 +162,8 @@ const store = new Vuex.Store({
                     return '';
             }
         }
-    },
-    plugins: [createLogger()]
+    }
+    // plugins: [createLogger()]
 });
 
 export default store;

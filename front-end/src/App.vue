@@ -31,10 +31,10 @@
               </span> &nbsp; MỞ SÒNG
             </button>
           </div>
-            <!-- <button @click="randomBet" 
+            <button @click="randomBet" 
               class="button is-small is-primary">
               Random Bet
-              </button>     -->
+              </button>    
         </div>
       </div>
 
@@ -46,7 +46,7 @@
               <transition-group tag="div"
                   enter-active-class="animated bounceInDown"
                   leave-active-class="animated fadeOutDown">
-                <token v-for="token in cell" :key="token.id" v-bind="token"></token>
+                <token v-for="(token, userId) in cell" :key="userId" v-bind="token"></token>
               </transition-group>
             </div>
           </div>
@@ -94,15 +94,6 @@
           </transition-group> 
         </table>
       </div>
-      
-      <!-- <div class="content">
-        <h3 class="is-medium">Thông báo</h3>
-
-        <div class="panel">
-          <notification :key="notification.id" 
-          v-for="notification in notifications" v-bind="notification" />
-        </div>
-      </div> -->
     </div>
   </div>
 </div>
@@ -112,7 +103,6 @@
 <script>
 import Dice from "./component/dice.vue";
 import Token from "./component/token.vue";
-import Notification from "./component/notification.vue";
 import { mapMutations, mapActions, mapState, mapGetters } from "vuex";
 
 import { WAITING_FOR_BET, ROLLING, WAITING_FOR_ROLL, FINISHED } from './model/GameStatus';
@@ -125,7 +115,7 @@ export default {
   },
   computed: {
     ...mapState(["dices", "players", "board", "status"]),
-    ...mapGetters(["leaderboard", "notifications", "gameStatus"]),
+    ...mapGetters(["leaderboard", "gameStatus"]),
     closeBetDisabled() {
       return this.status !== WAITING_FOR_BET;
     },
@@ -144,8 +134,7 @@ export default {
   },
   components: {
     dice: Dice,
-    token: Token,
-    notification: Notification
+    token: Token
   }
 };
 </script>
