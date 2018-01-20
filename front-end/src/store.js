@@ -8,6 +8,8 @@ import Player from './model/Player';
 import Notification from './model/Notification';
 import { WAITING_FOR_BET, WAITING_FOR_ROLL, ROLLING, FINISHED } from './model/GameStatus';
 
+import firebase from './firebase';
+
 const hoang = new Player('1', 'Hoang', 'https://pickaface.net/gallery/avatar/unr_emilee_180112_2136_x9pmt.png');
 const minh = new Player('2', 'Minh', 'https://pickaface.net/gallery/avatar/unr_jamal_180112_2132_x9i2f.png');
 const long = new Player('3', 'Long', 'https://pickaface.net/gallery/avatar/unr_biba_180112_2131_2kdzozc.png');
@@ -125,6 +127,9 @@ const store = new Vuex.Store({
                 }
             }
             commit('changeStatus', FINISHED);
+
+            firebase.update([...state.players]
+                .sort((p1, p2) => p2.point - p1.point));
         },
         randomBet({ dispatch }) {
             dispatch('placeBet', { player: hoang, bet: 5, choice: 1 })

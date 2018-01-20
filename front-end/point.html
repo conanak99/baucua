@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.css" />
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/2.0.46/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" />
+    <title>Bảng xếp hạng bầu cua</title>
+    <style>
+        .avatar {
+            max-width: 50px;
+        }
+    </style>
+</head>
+
+<body>
+    <div ng-app="pointApp" ng-controller="mainCtrl" id="app">
+        <div style="margin-top: 20px" class="container content">
+            <h1 class="is-medium">Bảng xếp hạng bầu cua</h1>
+
+            <div class="field">
+                <label class="label">Tìm kiếm</label>
+                <div class="control">
+                    <input class="input" ng-model="search" type="text" placeholder="Tìm tên bạn">
+                </div>
+            </div>
+
+            <table class="table is-striped is-narrow">
+                <thead>
+                    <tr>
+                        <th>Hạng</th>
+                        <th>Avatar</th>
+                        <th>Tên</th>
+                        <th>Điểm</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="player in players | filter:search">
+                        <td>{{players.indexOf(player) + 1}}</td>
+                        <td><img class="avatar" ng-src="{{player.avatar}}" /></td>
+                        <td>{{player.name}}</td>
+                        <td>{{player.point}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
+
+<!-- AngularFire -->
+<script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
+
+<script>
+    // Initialize the Firebase SDK
+    var config = {
+        apiKey: "AIzaSyA3iG3n_v0Ngg2AMPG97GPKPqYND40Hikg",
+        authDomain: "bau-cua-facebook.firebaseapp.com",
+        databaseURL: "https://bau-cua-facebook.firebaseio.com",
+        projectId: "bau-cua-facebook",
+        storageBucket: "bau-cua-facebook.appspot.com",
+        messagingSenderId: "666645143703"
+    };
+    firebase.initializeApp(config);
+</script>
+
+<script>
+    var app = angular.module("pointApp", ["firebase"]);
+
+    app.controller("mainCtrl", function($scope, $firebaseArray) {
+        var ref = firebase.database().ref().child('players');
+        $scope.players = $firebaseArray(ref);
+    });
+</script>
+
+</html>

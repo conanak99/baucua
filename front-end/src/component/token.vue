@@ -47,9 +47,10 @@ export default {
   position: absolute;
   top: 35%;
   left: 35%;
+  font-size: 13px;
   font-weight: bold;
   background: white;
-  padding: 4px 4px;
-  line-height: 10px;
+  padding: 2px 2px;
+  line-height: 7px;
 }
 </style>
