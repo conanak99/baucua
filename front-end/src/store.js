@@ -18,6 +18,21 @@ const long = new Player('3', 'Long', 'https://pickaface.net/gallery/avatar/unr_b
 const diceRollSound = new Audio('./../assets/dice-roll.mp3');
 diceRollSound.volume = 1;
 
+let leaderboardCache = [];
+
+// JS sort take nlogn so we use this with nlogk instead
+function findMaxElements(input, count) {
+    var result = [];
+    for (let i = 0; i < input.length; i++) {
+        result.push(input[i]);
+        if (result.length > count) {
+            result.sort(function(a, b) { return b.point - a.point; });
+            result.pop();
+        }
+    }
+    return result;
+}
+
 Vue.use(Vuex);
 var play = new Play();
 const store = new Vuex.Store({
@@ -145,8 +160,12 @@ const store = new Vuex.Store({
     },
     getters: {
         leaderboard: (state) => {
-            var players = Object.values(state.players);
-            return players.sort((p1, p2) => p2.point - p1.point).slice(0, 5);
+            // For performance, only recalculate when finished game or when betting
+            if (state.status !== FINISHED && state.status !== WAITING_FOR_BET) return leaderboardCache;
+
+            const players = Object.values(state.players);
+            leaderboardCache = findMaxElements(players, 8);
+            return leaderboardCache;
         },
         gameStatus: (state) => {
             switch (state.status) {
@@ -165,5 +184,6 @@ const store = new Vuex.Store({
     }
     // plugins: [createLogger()]
 });
+
 
 export default store;
