@@ -20,17 +20,23 @@ diceRollSound.volume = 1;
 
 let leaderboardCache = [];
 
-// JS sort take nlogn so we use this with nlogk instead
+// JS sort take nlogn so we use this with nk instead
 function findMaxElements(input, count) {
-    var result = [];
-    for (let i = 0; i < input.length; i++) {
-        result.push(input[i]);
-        if (result.length > count) {
-            result.sort(function(a, b) { return b.point - a.point; });
-            result.pop();
+    // For small array, use sort nlogn
+    if (input.length < count * count)
+        return input.sort((a, b) => b.point - a.point).slice(0, count);
+
+    // For bigger on, use kn
+    for (let index = 0; index < count; index++) {
+        for (let i = input.length - 1; i >= 1; i--) {
+            if (input[i].point > input[i - 1].point) {
+                const temp = input[i];
+                input[i] = input[i - 1];
+                input[i - 1] = temp;
+            }
         }
     }
-    return result;
+    return input.slice(0, count);
 }
 
 Vue.use(Vuex);
@@ -161,10 +167,10 @@ const store = new Vuex.Store({
     getters: {
         leaderboard: (state) => {
             // For performance, only recalculate when finished game or when betting
-            if (state.status !== FINISHED && state.status !== WAITING_FOR_BET) return leaderboardCache;
-
-            const players = Object.values(state.players);
-            leaderboardCache = findMaxElements(players, 8);
+            if (state.status === FINISHED || state.status === WAITING_FOR_BET) {
+                const players = Object.values(state.players);
+                leaderboardCache = findMaxElements(players, 5);
+            }
             return leaderboardCache;
         },
         gameStatus: (state) => {

@@ -1,5 +1,5 @@
 <template>
-    <div class="token" :style="style">
+    <div v-once class="token" :style="style">
         <span class="point">{{bet}}</span>
         <img :src="avatar" class="avatar"/>
     </div>

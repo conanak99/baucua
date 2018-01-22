@@ -31,7 +31,7 @@ class LoadTester {
         }
 
         for (const player of players) {
-            await this.wait(10);
+            await this.wait(50);
             this.emitter.emit('newBet', player);
         }
     }
