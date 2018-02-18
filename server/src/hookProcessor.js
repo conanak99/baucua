@@ -13,7 +13,7 @@ const choiceToNumberMap = {
 };
 
 type Emitter = {
-    emit: Function
+    emit(name: string, event: Object): void
 };
 type Bet = {
     bet: number,
@@ -67,6 +67,7 @@ class HookProcessor {
 
         const avatar = await api.getAvatar(sender_id);
         for (const bet of bets) {
+
             const playerAndBet = {
                 id: sender_id,
                 name: sender_name,

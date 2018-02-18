@@ -2,7 +2,7 @@
 const mockData = require('./../config/mockdata');
 
 type Emitter = {
-    emit: Function
+    emit(name: string, event: Object): void
 };
 class LoadTester {
     emitter: Emitter;
