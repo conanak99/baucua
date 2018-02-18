@@ -4,7 +4,8 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "node index.js NODE_ENV=production",
+        "prestart": "flow-remove-types -d dist/ src/",
+        "start": "node dist/index.js NODE_ENV=production",
         "prod": "pm2 start index.js",
         "stop-prod": "pm2 remove index",
         "deploy": "now --public",
@@ -20,5 +21,9 @@
         "request": "^2.83.0",
         "request-promise": "^4.2.2",
         "socket.io": "^2.0.4"
+    },
+    "devDependencies": {
+        "flow-bin": "^0.66.0",
+        "flow-remove-types": "^1.2.3"
     }
 }

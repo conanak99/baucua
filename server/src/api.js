@@ -1,12 +1,16 @@
+// @flow
+
 const request = require('request-promise');
-const { accessToken } = require('./config/secret');
+const { accessToken } = require('./../config/secret');
 
 class Api {
+    cache: Object;
+
     constructor() {
         this.cache = {};
     }
 
-    async getAvatar(id) {
+    async getAvatar(id: string): Promise < string > {
         if (this.cache[id]) return this.cache[id];
 
         const url = `https://graph.facebook.com/${id}/picture`;

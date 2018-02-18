@@ -1,10 +1,17 @@
+// @flow
 const mockData = require('./mockdata');
+
+type Emitter = {
+    emit: Function
+};
 class LoadTester {
-    constructor(emitter) {
+    emitter: Emitter;
+
+    constructor(emitter: Emitter) {
         this.emitter = emitter;
     }
 
-    getRandomInt(min, max) {
+    getRandomInt(min: number, max: number): number {
         return min + Math.floor(Math.random() * Math.floor(max - min + 1));
     }
 
@@ -12,11 +19,11 @@ class LoadTester {
         return mockData[this.getRandomInt(0, mockData.length - 1)];
     }
 
-    wait(miliseconds) {
+    wait(miliseconds: number): Promise < void > {
         return new Promise((resolve) => setTimeout(resolve, miliseconds));
     }
 
-    async runLoadTest(numberOfUser) {
+    async runLoadTest(numberOfUser: number) {
         const players = [];
         for (let index = 0; index < numberOfUser; index++) {
             const user = this.getRandomUser();

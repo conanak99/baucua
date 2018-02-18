@@ -1,3 +1,5 @@
+// @flow
+
 const textParser = require('./textParser');
 const api = require('./api');
 
@@ -10,13 +12,38 @@ const choiceToNumberMap = {
     'cua': 6
 };
 
+type Emitter = {
+    emit: Function
+};
+type Bet = {
+    bet: number,
+    choice: number
+};
+type Change = {
+    field: string,
+    value: {
+        sender_id: string,
+        sender_name: string,
+        message: string
+    },
+    post_id: string,
+    item: string,
+    verb: string
+};
+type Entry = {
+    changes: Array < Change >
+};
+
 class HookProcessor {
-    constructor(postId, emitter) {
+    postId: string;
+    emitter: Emitter;
+
+    constructor(postId: string, emitter: Emitter) {
         this.postId = postId;
         this.emitter = emitter;
     }
 
-    async processHook(hookObject) {
+    async processHook(hookObject: { entry: Array < Entry > }) {
         for (const entry of hookObject.entry) {
             for (const change of entry.changes) {
                 this.processEntryChange(change);
@@ -24,7 +51,7 @@ class HookProcessor {
         }
     }
 
-    async processEntryChange(change) {
+    async processEntryChange(change: Change) {
         if (change.field !== 'feed') return;
 
         // New comment only
@@ -52,7 +79,7 @@ class HookProcessor {
         }
     }
 
-    getBetFromComment(comment) {
+    getBetFromComment(comment: string): Array < Bet > {
         const cleanedComment = textParser.charToNumber(
             textParser.removeUnicode(comment.toLowerCase()));
 

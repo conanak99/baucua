@@ -1,5 +1,7 @@
+// @flow
+
 class TextParser {
-    removeUnicode(str) {
+    removeUnicode(str: string): string {
         str = str.toLowerCase();
         str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
         str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
@@ -11,7 +13,7 @@ class TextParser {
         return str;
     }
 
-    charToNumber(str) {
+    charToNumber(str: string): string {
         var charObj = {
             "mot": 1,
             "hai": 2,

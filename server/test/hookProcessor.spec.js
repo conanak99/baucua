@@ -1,4 +1,4 @@
-const HookProcessor = require('./../hookProcessor');
+const HookProcessor = require('./../src/hookProcessor');
 const each = require('jest-each');
 
 const processor = new HookProcessor(0, null);
