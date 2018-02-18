@@ -1,5 +1,5 @@
 // @flow
-const mockData = require('./mockdata');
+const mockData = require('./../config/mockdata');
 
 type Emitter = {
     emit: Function
