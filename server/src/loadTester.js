@@ -19,7 +19,7 @@ class LoadTester {
         return mockData[this.getRandomInt(0, mockData.length - 1)];
     }
 
-    wait(miliseconds: number): Promise < void > {
+    wait(miliseconds: number): Promise <void> {
         return new Promise((resolve) => setTimeout(resolve, miliseconds));
     }
 

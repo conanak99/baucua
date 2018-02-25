@@ -1,10 +1,9 @@
-const HookProcessor = require('./../src/hookProcessor');
+const HookProcessor = require('./../dist/hookProcessor');
 const each = require('jest-each');
 
 const processor = new HookProcessor(0, null);
 
 describe('test-parser', () => {
-
     each([
         ['5 BẦU 4 gà', [{ bet: 5, choice: 2 }, { bet: 4, choice: 3 }]],
         ['Cho em đặt 5 cọp,6 gà 3 CUA', [{ bet: 5, choice: 1 }, { bet: 6, choice: 3 }, { bet: 3, choice: 6 }]],

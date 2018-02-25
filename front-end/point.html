@@ -18,14 +18,12 @@
     <div ng-app="pointApp" ng-controller="mainCtrl" id="app">
         <div style="margin-top: 20px" class="container content">
             <h1 class="is-medium">Bảng xếp hạng bầu cua</h1>
-
             <div class="field">
                 <label class="label">Tìm kiếm</label>
                 <div class="control">
                     <input class="input" ng-model="search" type="text" placeholder="Tìm tên bạn">
                 </div>
             </div>
-
             <table class="table is-striped is-narrow">
                 <thead>
                     <tr>
@@ -49,13 +47,8 @@
 </body>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/3.6.6/firebase.js"></script>
-
-<!-- AngularFire -->
 <script src="https://cdn.firebase.com/libs/angularfire/2.3.0/angularfire.min.js"></script>
-
 <script>
     // Initialize the Firebase SDK
     var config = {
@@ -68,7 +61,6 @@
     };
     firebase.initializeApp(config);
 </script>
-
 <script>
     var app = angular.module("pointApp", ["firebase"]);
 
