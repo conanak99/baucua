@@ -43,6 +43,27 @@ class HookProcessor {
         this.emitter = emitter;
     }
 
+    processYoutubeComments(comments) {
+        // Process new comment
+        for (const comment of comments) {
+            const bets = this.getBetFromComment(comment.text);
+
+            if (bets.length === 0) continue;
+
+            for (const bet of bets) {
+                const playerAndBet = {
+                    id: comment.userId,
+                    name: comment.username,
+                    avatar: comment.avatar,
+                    bet: bet.bet,
+                    choice: bet.choice
+                };
+                console.log(playerAndBet);
+                this.emitter.emit('newBet', playerAndBet);
+            }
+        }
+    }    
+
     async processHook(hookObject: { entry: Array < Entry > }) {
         for (const entry of hookObject.entry) {
             for (const change of entry.changes) {

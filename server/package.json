@@ -6,13 +6,15 @@
     "scripts": {
         "prestart": "flow-remove-types -d dist/ src/",
         "start": "node dist/index.js NODE_ENV=production",
+        "start-youtube": "node dist/youtube-index.js NODE_ENV=production",
         "prod": "pm2 start index.js",
         "stop-prod": "pm2 remove index",
-        "deploy": "now --public",
+        "build": "flow-remove-types -d dist/ src/",
         "test": "jest --verbose"
     },
     "dependencies": {
         "body-parser": "^1.18.2",
+        "delay": "^3.0.0",
         "express": "^4.16.2",
         "jest": "^22.1.4",
         "jest-each": "^0.3.1",
