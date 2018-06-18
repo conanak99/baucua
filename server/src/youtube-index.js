@@ -7,14 +7,18 @@ const HookProcessor = require('./hookProcessor');
 const hookProcessor = new HookProcessor(null, io);
 
 var lastCommentId = null;
+var currentPageToken = null;
 
 async function run() {
     while(true) {
         console.log('Start getting comments');
-        const { pollingTime, comments } = await getLiveChat();
-        const newComments = getNewComments(comments); 
+        // Youtube always return 75 items only, it's very weird
+        const { pollingTime, comments } = await getLiveChat(currentPageToken);
+
+        const newComments = getNewComments(comments, lastCommentId); 
         console.log(`Found ${newComments.length} new comments`);
         if (newComments.length > 0) {
+            lastCommentId = newComments[newComments.length - 1].id; 
             console.log(JSON.stringify(newComments, null, 2));
         }
 
@@ -24,12 +28,11 @@ async function run() {
     }
 }
 
-function getNewComments(allComments) {
+function getNewComments(allComments, lastCommentId) {
     if (!allComments || allComments.length === 0) return [];
     
     // New page or comment id is not set
     if (allComments.every(comment => comment.id !== lastCommentId)) {
-        lastCommentId = allComments[allComments.length - 1].id; 
         return allComments;  
     } else {
         const result = [];
@@ -37,16 +40,15 @@ function getNewComments(allComments) {
         for (const comment of allComments) {
             if (!processed) {
                 result.push(comment);
-                lastCommentId = comment.id;
             }
             // Loop until found processed
-            if (comment.id ===  lastCommentId) processed = false;
+            if (comment.id === lastCommentId) processed = false;
         }
         return result;
     }
 }
 
-async function getLiveChat() {
+async function getLiveChat(pageToken = null) {
     const url = 'https://www.googleapis.com/youtube/v3/liveChat/messages';
     const result = await request({
         uri: url,
@@ -56,13 +58,14 @@ async function getLiveChat() {
         qs: {
             part: 'id,snippet,authorDetails',
             liveChatId: 'EiEKGFVDZFY5dG43OXYzZWNTRHBDMUFqVkthdxIFL2xpdmU',
-            profileImageSize: 150,
-            maxResults: 2000,
-            pageToken: null
+            profileImageSize: 100,
+            maxResults: 200,
+            pageToken: pageToken
         },
         json: true
     });
     const pollingTime = result.pollingIntervalMillis;
+    const nextPageToken = result.nextPageToken;
     const comments = result.items.map(item => ({
         id: item.id,
         text: item.snippet.displayMessage,
@@ -73,6 +76,7 @@ async function getLiveChat() {
 
     return {
         pollingTime,
+        nextPageToken,
         comments
     };
 }

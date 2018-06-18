@@ -10,7 +10,6 @@ yarn-error.log
 *.ntvs*
 *.njsproj
 *.sln
-src/assets/firebase-config.json
 firebase-config.json
 firebase-user.json
 server/config/secret.json
