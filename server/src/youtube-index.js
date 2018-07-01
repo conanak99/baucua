@@ -13,7 +13,10 @@ async function run() {
     while(true) {
         console.log('Start getting comments');
         // Youtube always return 75 items only, it's very weird
-        const { pollingTime, comments } = await getLiveChat(currentPageToken);
+        const { pollingTime, nextPageToken, comments } = await getLiveChat(currentPageToken);
+        if (comments.length === 200) {
+            currentPageToken = nextPageToken;
+        }
 
         const newComments = getNewComments(comments, lastCommentId); 
         console.log(`Found ${newComments.length} new comments`);

@@ -4,12 +4,13 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "prestart": "flow-remove-types -d dist/ src/",
+        "dev": "nodemon src/index.js --exec babel-node",
+        "build": "babel src -d dist",
+        "prestart": "babel src -d dist",
         "start": "node dist/index.js NODE_ENV=production",
         "start-youtube": "node dist/youtube-index.js NODE_ENV=production",
         "prod": "pm2 start index.js",
         "stop-prod": "pm2 remove index",
-        "build": "flow-remove-types -d dist/ src/",
         "test": "jest --verbose"
     },
     "dependencies": {
@@ -25,7 +26,10 @@
         "socket.io": "^2.0.4"
     },
     "devDependencies": {
+        "babel-cli": "^6.26.0",
+        "babel-preset-env": "^1.7.0",
+        "babel-preset-flow": "^6.23.0",
         "flow-bin": "^0.66.0",
-        "flow-remove-types": "^1.2.3"
+        "nodemon": "^1.17.5"
     }
 }
