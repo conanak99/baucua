@@ -169,7 +169,7 @@ const store = new Vuex.Store({
             // For performance, only recalculate when finished game or when betting
             if (state.status === FINISHED || state.status === WAITING_FOR_BET) {
                 const players = Object.values(state.players);
-                leaderboardCache = findMaxElements(players, 5);
+                leaderboardCache = findMaxElements(players, 8);
             }
             return leaderboardCache;
         },
