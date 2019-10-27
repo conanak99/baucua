@@ -1,103 +1,120 @@
 <template>
-<div class="container is-fullhd">
-  <div class="columns">
-    <div class="column is-8">
-      <div class="columns">
-        <div class="column is-5">
-          <dice v-for="(number, index) in dices" 
-          :key="index"
-          :isRolling="isDiceRolling" 
-          :number="number"></dice>
-        </div>
-        <div class="column is-7 content">
-          <div>
-            <h3 class="is-medium" :class="{'has-text-info': status === 'WAITING_FOR_BET'}">
-              {{gameStatus}}</h3>
+  <div class="container is-fullhd">
+    <div class="columns">
+      <div class="column is-8">
+        <div class="columns">
+          <div class="column is-5">
+            <dice
+              v-for="(number, index) in dices"
+              :key="index"
+              :isRolling="isDiceRolling"
+              :number="number"
+            ></dice>
           </div>
-          <div class="buttons">
-            <button @click="closeBet" class="button is-danger" :disabled="closeBetDisabled">
-              <span class="icon">
-                <i class="mdi mdi-close-box-outline"></i>
-              </span> &nbsp; ĐÓNG SÒNG
-            </button>
-            <button @click="playGame" class="button is-primary" :disabled="playGameDisabled">
-              <span class="icon">
-                <i class="mdi mdi-dice-multiple"></i>
-              </span> &nbsp; LẮC BẦU CUA
-            </button>
-            <button @click="restart" class="button is-warning" :disabled="clearBoardDisabled">
-              <span class="icon">
-                <i class="mdi mdi-cards-playing-outline"></i>
-              </span> &nbsp; MỞ SÒNG
-            </button>
-          </div>
-            <!-- <button @click="randomBet" 
+          <div class="column is-7 content">
+            <div>
+              <h3
+                class="is-medium"
+                :class="{'has-text-info': status === 'WAITING_FOR_BET'}"
+              >{{gameStatus}}</h3>
+            </div>
+            <div class="buttons">
+              <button @click="closeBet" class="button is-danger" :disabled="closeBetDisabled">
+                <span class="icon">
+                  <i class="mdi mdi-close-box-outline"></i>
+                </span> &nbsp; ĐÓNG SÒNG
+              </button>
+              <button @click="playGame" class="button is-primary" :disabled="playGameDisabled">
+                <span class="icon">
+                  <i class="mdi mdi-dice-multiple"></i>
+                </span> &nbsp; LẮC BẦU CUA
+              </button>
+              <button @click="restart" class="button is-warning" :disabled="clearBoardDisabled">
+                <span class="icon">
+                  <i class="mdi mdi-cards-playing-outline"></i>
+                </span> &nbsp; MỞ SÒNG
+              </button>
+            </div>
+            <!-- <button @click="randomBet"
               class="button is-small is-primary">
               Random Bet
-              </button>     -->
+            </button>-->
+          </div>
         </div>
-      </div>
 
-      <div>
-        <div class="bc-table">
-          <img src="./../assets/baucua.jpg" alt="" class="image bc-image"/>
-          <div class="bc-overlay">
-            <div class="boards" :key="key" v-for="(cell, key) in board">
-              <transition-group tag="div"
+        <div>
+          <div class="bc-table">
+            <img src="./../assets/baucua.jpg" alt class="image bc-image" />
+            <div class="bc-overlay">
+              <div class="boards" :key="key" v-for="(cell, key) in board">
+                <transition-group
+                  tag="div"
                   enter-active-class="animated bounceInDown"
-                  leave-active-class="animated fadeOutDown">
-                <token v-for="(token, userId) in cell" :key="userId" v-bind="token"></token>
-              </transition-group>
+                  leave-active-class="animated fadeOutDown"
+                >
+                  <token v-for="(token, userId) in cell" :key="userId" v-bind="token"></token>
+                </transition-group>
+              </div>
             </div>
           </div>
         </div>
-        
       </div>
-    </div>
-    <div class="column is-4">
-      <div class="content">
-        <h3 class="is-medium">Luật chơi (Vui là chính)</h3>
-        <ul>
-          <li>Mới chơi được tặng <b>20 đồng</b></li>
-          <li>Mỗi lần cháy túi sẽ được tặng <b>2 đồng</b> để gỡ gạc</li>
-          <li>
-            Đặt cược bằng cách <b>comment số lượng và lựa chọn</b>: <i>2 cua, 4 bầu, 3 cọp</i>
-          </li>
-          <li>Đặt rồi không được đặt lại (vì tui chưa code)</li>
-          <li>Tra số tiền tại <a href="baucua.toidicodedao.com">baucua.toidicodedao.com</a>
-          </li>
-        </ul>
-      </div>
+      <div class="column is-4">
+        <div class="content">
+          <h3 class="is-medium">Luật chơi (Vui là chính)</h3>
+          <ul>
+            <li>
+              Mới chơi được tặng
+              <b>20 đồng</b>
+            </li>
+            <li>
+              Mỗi lần cháy túi sẽ được tặng
+              <b>2 đồng</b> để gỡ gạc
+            </li>
+            <li>
+              Đặt cược bằng cách
+              <b>comment số lượng và lựa chọn</b>:
+              <i>2 cua, 4 bầu, 3 cọp</i>
+            </li>
+            <li>Đặt rồi không được đặt lại (vì tui chưa code)</li>
+            <li>
+              Tra số tiền tại
+              <a href="http://baucua2.toidicodedao.com">baucua2.toidicodedao.com</a>
+            </li>
+          </ul>
+        </div>
 
-      <div class="content">
-        <h3 class="is-medium">Bảng xếp hạng</h3>
-        <table class="table is-striped is-narrow">
-          <thead>
-            <tr>
-              <th>Hạng</th>
-              <th>Avatar</th>
-              <th>Tên</th>
-              <th>Điểm</th>
-            </tr>
-          </thead>
-          <transition-group 
-             name="flip-list"
-             enter-active-class="animated slideInRight"
-             leave-active-class="animated slideOutRight"
-             tag="tbody">
-            <tr :key="player.id" v-for="(player, index) in leaderboard">
-              <td>{{index + 1}}</td>
-              <td><img class="avatar" :src="player.avatar" /></td>
-              <td>{{player.name}}</td>
-              <td>{{player.point}}</td>
-            </tr>  
-          </transition-group> 
-        </table>
+        <div class="content">
+          <h3 class="is-medium">Bảng xếp hạng</h3>
+          <table class="table is-striped is-narrow">
+            <thead>
+              <tr>
+                <th>Hạng</th>
+                <th>Avatar</th>
+                <th>Tên</th>
+                <th>Điểm</th>
+              </tr>
+            </thead>
+            <transition-group
+              name="flip-list"
+              enter-active-class="animated slideInRight"
+              leave-active-class="animated slideOutRight"
+              tag="tbody"
+            >
+              <tr :key="player.id" v-for="(player, index) in leaderboard">
+                <td>{{index + 1}}</td>
+                <td>
+                  <img class="avatar" :src="player.avatar" />
+                </td>
+                <td>{{player.name}}</td>
+                <td>{{player.point}}</td>
+              </tr>
+            </transition-group>
+          </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
-  
 </template>
 
 <script>
@@ -105,13 +122,17 @@ import Dice from "./component/dice.vue";
 import Token from "./component/token.vue";
 import { mapMutations, mapActions, mapState, mapGetters } from "vuex";
 
-import { WAITING_FOR_BET, ROLLING, WAITING_FOR_ROLL, FINISHED } from './model/GameStatus';
+import {
+  WAITING_FOR_BET,
+  ROLLING,
+  WAITING_FOR_ROLL,
+  FINISHED
+} from "./model/GameStatus";
 
 export default {
   name: "app",
   methods: {
-    ...mapActions(["playGame", "closeBet", "randomBet", "restart"]),
-
+    ...mapActions(["playGame", "closeBet", "randomBet", "restart"])
   },
   computed: {
     ...mapState(["dices", "players", "board", "status"]),
@@ -160,7 +181,8 @@ export default {
 }
 
 h1,
-h2, h4 {
+h2,
+h4 {
   font-weight: normal;
 }
 
