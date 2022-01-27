@@ -1,4 +1,5 @@
 import { textParser } from "./textParser";
+import { Comment } from "./models/comment";
 
 const choiceToNumberMap: Record<string, number> = {
   cop: 1,
@@ -27,9 +28,6 @@ interface Change {
   item: string;
   verb: string;
 }
-interface Entry {
-  changes: Array<Change>;
-}
 
 export default class HookProcessor {
   postId?: string;
@@ -40,7 +38,7 @@ export default class HookProcessor {
     this.postId = postId;
   }
 
-  processYoutubeComments(comments: any) {
+  processYoutubeComments(comments: Comment[]) {
     // Process new comment
     for (const comment of comments) {
       const bets = this.getBetFromComment(comment.text);

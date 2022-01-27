@@ -2,10 +2,11 @@ import delay from "delay";
 import axios from "axios";
 import { Server } from "socket.io";
 
-const io = new Server(3002);
-
+import { Comment } from "./models/comment";
 import { ACCESS_TOKEN } from "./../config/secret";
 import HookProcessor from "./hookProcessor";
+
+const io = new Server(3002);
 const hookProcessor = new HookProcessor(io);
 
 let lastCommentId = "";
@@ -36,11 +37,11 @@ async function run() {
   }
 }
 
-function getNewComments(allComments: any, lastCommentId: any) {
+function getNewComments(allComments: Comment[], lastCommentId: string) {
   if (!allComments || allComments.length === 0) return [];
 
   // New page or comment id is not set
-  if (allComments.every((comment: any) => comment.id !== lastCommentId)) {
+  if (allComments.every((comment) => comment.id !== lastCommentId)) {
     return allComments;
   } else {
     const result = [];
@@ -56,9 +57,26 @@ function getNewComments(allComments: any, lastCommentId: any) {
   }
 }
 
+interface LiveChatMessage {
+  id: string;
+  snippet: {
+    displayMessage: string;
+  };
+  authorDetails: {
+    channelId: string;
+    displayName: string;
+    profileImageUrl: string;
+  };
+}
+interface LiveChatResponse {
+  items: LiveChatMessage[];
+  pollingIntervalMillis: number;
+  nextPageToken: string;
+}
+
 async function getLiveChat(pageToken = "") {
   const url = "https://www.googleapis.com/youtube/v3/liveChat/messages";
-  const response = await axios.get<any>(url, {
+  const response = await axios.get<LiveChatResponse>(url, {
     params: {
       part: "id,snippet,authorDetails",
       liveChatId: "EiEKGFVDZFY5dG43OXYzZWNTRHBDMUFqVkthdxIFL2xpdmU",
@@ -74,7 +92,7 @@ async function getLiveChat(pageToken = "") {
   const result = response.data;
   const pollingTime = result.pollingIntervalMillis;
   const nextPageToken = result.nextPageToken;
-  const comments = result.items.map((item: any) => ({
+  const comments: Comment[] = result.items.map((item) => ({
     id: item.id,
     text: item.snippet.displayMessage,
     userId: item.authorDetails.channelId,

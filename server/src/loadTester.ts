@@ -1,10 +1,10 @@
-// @flow
-const mockData = require('./../config/mockdata');
+import mockData from "./../config/mockdata.json";
 
 type Emitter = {
-  emit(name: string, event: Object): void
+  emit(name: string, event: Object): void;
 };
-class LoadTester {
+
+export default class LoadTester {
   emitter: Emitter;
 
   constructor(emitter: Emitter) {
@@ -19,8 +19,8 @@ class LoadTester {
     return mockData[this.getRandomInt(0, mockData.length - 1)];
   }
 
-  wait(miliseconds: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, miliseconds));
+  wait(milliseconds: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, milliseconds));
   }
 
   async runLoadTest(numberOfUser: number) {
@@ -32,16 +32,14 @@ class LoadTester {
         name: user.name,
         avatar: user.avatar,
         bet: this.getRandomInt(1, 30),
-        choice: this.getRandomInt(1, 6)
+        choice: this.getRandomInt(1, 6),
       };
       players.push(player);
     }
 
     for (const player of players) {
       await this.wait(50);
-      this.emitter.emit('newBet', player);
+      this.emitter.emit("newBet", player);
     }
   }
 }
-
-module.exports = LoadTester;
