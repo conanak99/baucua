@@ -1,35 +1,39 @@
 {
-    "name": "baucua-server",
-    "version": "1.0.0",
-    "main": "index.js",
-    "license": "MIT",
-    "scripts": {
-        "dev": "nodemon src/index.js --exec babel-node",
-        "build": "babel src -d dist",
-        "prestart": "babel src -d dist",
-        "start": "node dist/index.js NODE_ENV=production",
-        "start-youtube": "node dist/youtube-index.js NODE_ENV=production",
-        "prod": "pm2 start index.js",
-        "stop-prod": "pm2 remove index",
-        "test": "jest --verbose"
-    },
-    "dependencies": {
-        "body-parser": "^1.18.2",
-        "delay": "^3.0.0",
-        "express": "^4.16.2",
-        "jest": "^22.1.4",
-        "jest-each": "^0.3.1",
-        "morgan": "^1.9.0",
-        "pm2": "^2.9.1",
-        "request": "^2.83.0",
-        "request-promise": "^4.2.2",
-        "socket.io": "^2.0.4"
-    },
-    "devDependencies": {
-        "babel-cli": "^6.26.0",
-        "babel-preset-env": "^1.7.0",
-        "babel-preset-flow": "^6.23.0",
-        "flow-bin": "^0.66.0",
-        "nodemon": "^1.17.5"
-    }
+  "name": "baucua-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon src/index.js --exec babel-node",
+    "build": "babel src -d dist",
+    "prestart": "babel src -d dist",
+    "start": "node dist/index.js NODE_ENV=production",
+    "start-youtube": "ts-node src/youtube-index.ts",
+    "prod": "pm2 start index.js",
+    "stop-prod": "pm2 remove index",
+    "test": "jest --verbose"
+  },
+  "dependencies": {
+    "axios": "^0.25.0",
+    "body-parser": "^1.18.2",
+    "delay": "^5.0.0",
+    "express": "^4.16.2",
+    "jest": "^22.1.4",
+    "jest-each": "^0.3.1",
+    "morgan": "^1.9.0",
+    "pm2": "^2.9.1",
+    "request": "^2.83.0",
+    "socket.io": "^4.4.1",
+    "typescript": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/delay": "^3.1.0",
+    "@types/socket.io": "^3.0.2",
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-flow": "^6.23.0",
+    "flow-bin": "^0.66.0",
+    "nodemon": "^1.17.5",
+    "ts-node": "^10.4.0"
+  }
 }
