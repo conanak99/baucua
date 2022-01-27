@@ -18,8 +18,6 @@
     "body-parser": "^1.18.2",
     "delay": "^5.0.0",
     "express": "^4.16.2",
-    "jest": "^22.1.4",
-    "jest-each": "^0.3.1",
     "morgan": "^1.9.0",
     "pm2": "^2.9.1",
     "request": "^2.83.0",
@@ -28,12 +26,16 @@
   },
   "devDependencies": {
     "@types/delay": "^3.1.0",
+    "@types/jest": "^27.4.0",
     "@types/socket.io": "^3.0.2",
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-flow": "^6.23.0",
     "flow-bin": "^0.66.0",
+    "jest": "^27.4.7",
+    "jest-each": "^27.4.6",
     "nodemon": "^1.17.5",
+    "ts-jest": "^27.1.3",
     "ts-node": "^10.4.0"
   }
 }
