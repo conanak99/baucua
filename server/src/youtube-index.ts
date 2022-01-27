@@ -1,10 +1,13 @@
 import delay from "delay";
 import axios from "axios";
 import { Server } from "socket.io";
+import "dotenv/config";
 
 import { Comment } from "./models/comment";
 import { ACCESS_TOKEN } from "./../config/secret";
 import HookProcessor from "./hookProcessor";
+
+console.log({ ACCESS_TOKEN });
 
 const io = new Server(3002);
 const hookProcessor = new HookProcessor(io);
