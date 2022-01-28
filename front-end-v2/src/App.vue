@@ -52,9 +52,9 @@
                 &nbsp; MỞ SÒNG
               </button>
             </div>
-            <button @click="randomBet" class="button is-small is-primary">
+            <!-- <button @click="randomBet" class="button is-small is-primary">
               Random Bet
-            </button>
+            </button> -->
           </div>
         </div>
 
