@@ -52,9 +52,9 @@
                 &nbsp; MỞ SÒNG
               </button>
             </div>
-            <!-- <button @click="randomBet" class="button is-small is-primary">
+            <button @click="randomBet" class="button is-small is-primary">
               Random Bet
-            </button> -->
+            </button>
           </div>
         </div>
 
@@ -93,7 +93,7 @@
             </li>
             <li>
               Mỗi lần cháy túi sẽ được tặng
-              <b>2 đồng</b> để gỡ gạc
+              <b>5 đồng</b> để gỡ gạc
             </li>
             <li>
               Đặt cược bằng cách
@@ -102,10 +102,8 @@
             </li>
             <li>Đặt rồi không được đặt lại (vì tui chưa code)</li>
             <li>
-              Tra số tiền tại
-              <a href="http://baucua2.toidicodedao.com"
-                >baucua2.toidicodedao.com</a
-              >
+              Tra số điểm tại
+              <a href="https://bit.ly/baucuadao">bit.ly/baucuadao</a>
             </li>
           </ul>
         </div>

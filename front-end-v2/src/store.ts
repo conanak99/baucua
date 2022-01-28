@@ -13,9 +13,11 @@ import {
 import { getResult } from "./helper/random";
 import { findMaxElements } from "./helper/array";
 import { BetChoice } from "./model/PlayerBet";
+import { syncPlayer } from "./helper/sync";
 
-const diceRollSound = new Audio("./../src/assets/dice-roll.mp3");
-diceRollSound.volume = 1;
+const DICE_SOUND = new Audio("./../src/assets/dice-roll.mp3");
+DICE_SOUND.volume = 1;
+const BONUS_POINT = 5;
 
 type Dice = [number, number, number];
 interface State {
@@ -106,7 +108,7 @@ export const store = createStore<State>({
   actions: {
     async rollDice({ commit }) {
       commit("changeStatus", ROLLING);
-      diceRollSound.play();
+      DICE_SOUND.play();
       await delay(2300);
 
       const result = getResult();
@@ -156,10 +158,7 @@ export const store = createStore<State>({
 
       commit("changeStatus", FINISHED);
 
-      // TODO: Filter for invalid name, avatar, id, point
-      const syncPlayer = Object.values(state.players)
-        .filter((p) => p.id && p.name && p.avatar)
-        .sort((p1, p2) => p2.point - p1.point);
+      syncPlayer(Object.values(state.players));
     },
     randomBet({ dispatch }) {
       const hoang = new Player(
@@ -190,10 +189,13 @@ export const store = createStore<State>({
     restart({ commit, state }) {
       commit("clearBoard");
 
-      // Bonus 2 point for lose users
+      // Bonus 5 point for lose/near-lose users
       for (const player of Object.values(state.players)) {
-        if (player.point === 0) {
-          commit("updatePlayerPoint", { playerId: player.id, changedValue: 2 });
+        if (player.point < 5) {
+          commit("updatePlayerPoint", {
+            playerId: player.id,
+            changedValue: BONUS_POINT,
+          });
         }
       }
       commit("changeStatus", WAITING_FOR_BET);
