@@ -1,5 +1,5 @@
 import delay from "delay";
-import { createStore } from "vuex";
+import { createStore, GetterTree, useStore as useVuexStore } from "vuex";
 
 import { countBy } from "lodash";
 
@@ -26,6 +26,31 @@ interface State {
 }
 
 let leaderboardCache: Player[] = [];
+
+const getters: GetterTree<State, State> = {
+  leaderboard: (state) => {
+    // For performance, only recalculate when finished game or when betting
+    if (state.status === FINISHED || state.status === WAITING_FOR_BET) {
+      const players = Object.values(state.players);
+      leaderboardCache = findMaxElements(players, 8);
+    }
+    return leaderboardCache;
+  },
+  gameStatus: (state) => {
+    switch (state.status) {
+      case WAITING_FOR_BET:
+        return "SÒNG ĐANG MỞ. Đặt đi bà con ơi!";
+      case WAITING_FOR_ROLL:
+        return "SÒNG ĐANG ĐÓNG. Chờ lắc bầu cua đê!";
+      case ROLLING:
+        return "LẮC LẮC LẮC. Bầu cua tôm cá";
+      case FINISHED:
+        return "LẮC XONG RỒI. Hốt tiền hốt tiền!";
+      default:
+        return "";
+    }
+  },
+};
 
 export const store = createStore<State>({
   state: {
@@ -174,31 +199,13 @@ export const store = createStore<State>({
       commit("changeStatus", WAITING_FOR_BET);
     },
   },
-  getters: {
-    leaderboard: (state) => {
-      // For performance, only recalculate when finished game or when betting
-      if (state.status === FINISHED || state.status === WAITING_FOR_BET) {
-        const players = Object.values(state.players);
-        leaderboardCache = findMaxElements(players, 8);
-      }
-      return leaderboardCache;
-    },
-    gameStatus: (state) => {
-      switch (state.status) {
-        case WAITING_FOR_BET:
-          return "SÒNG ĐANG MỞ. Đặt đi bà con ơi!";
-        case WAITING_FOR_ROLL:
-          return "SÒNG ĐANG ĐÓNG. Chờ lắc bầu cua đê!";
-        case ROLLING:
-          return "LẮC LẮC LẮC. Bầu cua tôm cá";
-        case FINISHED:
-          return "LẮC XONG RỒI. Hốt tiền hốt tiền!";
-        default:
-          return "";
-      }
-    },
-  },
+  getters,
   // plugins: [createLogger()]
 });
 
+type storeType = typeof store & { getters: typeof getters };
+
 export default store;
+export function useStore(): storeType {
+  return useVuexStore();
+}

@@ -60,7 +60,11 @@
 
         <div>
           <div class="bc-table">
-            <img src="./assets/baucua.jpg" alt class="image bc-image" />
+            <img
+              src="./assets/baucua.jpg"
+              alt="baucua"
+              class="image bc-image"
+            />
             <div class="bc-overlay">
               <div class="boards" :key="key" v-for="(cell, key) in board">
                 <transition-group
@@ -139,10 +143,23 @@
   </div>
 </template>
 
+<script setup lang="ts">
+const store = useStore();
+
+const dices = computed(() => store.state.dices);
+const board = computed(() => store.state.board);
+const status = computed(() => store.state.status);
+
+const closeBetDisabled = computed(() => status.value !== WAITING_FOR_BET);
+const playGameDisabled = computed(() => status.value !== WAITING_FOR_ROLL);
+const clearBoardDisabled = computed(() => status.value !== FINISHED);
+const isDiceRolling = computed(() => status.value === ROLLING);
+</script>
+
 <script lang="ts">
 import Dice from "./components/dice.vue";
 import Token from "./components/token.vue";
-import { mapActions, mapState, mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 
 import {
   WAITING_FOR_BET,
@@ -150,27 +167,17 @@ import {
   WAITING_FOR_ROLL,
   FINISHED,
 } from "./model/GameStatus";
+import { useStore } from "./store";
+import { computed } from "vue";
 
+// LOL VUEX/NEXT TYPING IS NOT STABLE NOW, DO NOT BOTHER ADD TYPING FOR THEM
 export default {
   name: "app",
   methods: {
     ...mapActions(["playGame", "closeBet", "randomBet", "restart"]),
   },
   computed: {
-    ...mapState(["dices", "players", "board", "status"]),
     ...mapGetters(["leaderboard", "gameStatus"]),
-    closeBetDisabled() {
-      return this.status !== WAITING_FOR_BET;
-    },
-    playGameDisabled() {
-      return this.status !== WAITING_FOR_ROLL;
-    },
-    clearBoardDisabled() {
-      return this.status !== FINISHED;
-    },
-    isDiceRolling() {
-      return this.status === ROLLING;
-    },
   },
   data() {
     return {};
