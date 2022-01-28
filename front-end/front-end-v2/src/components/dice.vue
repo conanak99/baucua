@@ -8,13 +8,14 @@
 import { computed, reactive, ref, watch } from "vue";
 import { getRandomInt } from "../helper/random";
 
+const ALL_URLS = ["1-cop", "2-bau", "3-ga", "4-tom", "5-ca", "6-cua"];
 const props = defineProps<{ number: number; isRolling: boolean }>();
 
 const state = reactive({ displayNum: props.number });
 const interval = ref(0);
 
 const url = computed(() => {
-  return `./assets/${state.displayNum - 1}.png`;
+  return `./src/assets/${ALL_URLS[state.displayNum - 1]}.jpg`;
 });
 const classObject = computed(() => {
   return {

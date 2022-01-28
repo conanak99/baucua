@@ -14,7 +14,7 @@ import { getResult } from "./helper/random";
 import { findMaxElements } from "./helper/array";
 import { BetChoice } from "./model/PlayerBet";
 
-const diceRollSound = new Audio("./../assets/dice-roll.mp3");
+const diceRollSound = new Audio("./../src/assets/dice-roll.mp3");
 diceRollSound.volume = 1;
 
 type Dice = [number, number, number];

@@ -12,7 +12,7 @@ defineProps<{
   id: string;
   name: string;
   avatar: string;
-  bet: string;
+  bet: number;
 }>();
 
 const style = {
