@@ -54,7 +54,7 @@ export default class HookProcessor {
           bet: bet.bet,
           choice: bet.choice,
         };
-        // console.log(playerAndBet);
+        console.log(playerBet);
         this.emitter.emit("newBet", playerBet);
       }
     }

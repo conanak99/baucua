@@ -1,5 +1,6 @@
 import delay from "delay";
 import axios from "axios";
+import { createServer } from "http";
 import { Server } from "socket.io";
 import "dotenv/config";
 
@@ -7,7 +8,13 @@ import { Comment } from "./models/comment";
 import { ACCESS_TOKEN } from "./../config/secret";
 import HookProcessor from "./hookProcessor";
 
-const io = new Server(3002);
+const httpServer = createServer();
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+  },
+});
+httpServer.listen(3002);
 const hookProcessor = new HookProcessor(io);
 
 let lastCommentId = "";
@@ -130,6 +137,8 @@ async function run() {
   if (!baucuaLive) {
     console.error("Can not find livestream for baucua!");
     return;
+  } else {
+    console.log("Found livestream for baucua:", baucuaLive.snippet);
   }
 
   while (true) {

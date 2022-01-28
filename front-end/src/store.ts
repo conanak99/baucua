@@ -17,7 +17,7 @@ import { syncPlayer } from "./helper/sync";
 
 const DICE_SOUND = new Audio("./../src/assets/dice-roll.mp3");
 DICE_SOUND.volume = 1;
-const BONUS_POINT = 5;
+const BONUS_POINT = 4;
 
 type Dice = [number, number, number];
 interface State {
@@ -189,12 +189,12 @@ export const store = createStore<State>({
     restart({ commit, state }) {
       commit("clearBoard");
 
-      // Bonus 5 point for lose/near-lose users
+      // Bonus points for lose/near-lose users to 4 points
       for (const player of Object.values(state.players)) {
-        if (player.point < 5) {
+        if (player.point < BONUS_POINT) {
           commit("updatePlayerPoint", {
             playerId: player.id,
-            changedValue: BONUS_POINT,
+            changedValue: BONUS_POINT - player.point,
           });
         }
       }
