@@ -1,5 +1,6 @@
 import { textParser } from "./textParser";
 import { Comment } from "./models/comment";
+import { PlayerBet } from "./models/player-bet";
 
 const choiceToNumberMap: Record<string, number> = {
   cop: 1,
@@ -46,7 +47,7 @@ export default class HookProcessor {
       if (bets.length === 0) continue;
 
       for (const bet of bets) {
-        const playerAndBet = {
+        const playerBet: PlayerBet = {
           id: comment.userId,
           name: comment.username,
           avatar: comment.avatar,
@@ -54,7 +55,7 @@ export default class HookProcessor {
           choice: bet.choice,
         };
         // console.log(playerAndBet);
-        this.emitter.emit("newBet", playerAndBet);
+        this.emitter.emit("newBet", playerBet);
       }
     }
   }
