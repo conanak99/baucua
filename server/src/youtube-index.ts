@@ -26,13 +26,17 @@ function getNewComments(allComments: Comment[], lastCommentId: string) {
     return allComments;
   } else {
     const result = [];
-    let processed = true;
+    let ignore = true;
+
+    // Comments are sorted from oldest to newest
+    // So we need to ignore the comment BEFORE last comment
     for (const comment of allComments) {
-      if (!processed) {
+      if (!ignore) {
         result.push(comment);
       }
+
       // Loop until found processed
-      if (comment.id === lastCommentId) processed = false;
+      if (comment.id === lastCommentId) ignore = false;
     }
     return result;
   }
