@@ -83,7 +83,7 @@ export const store = createStore<State>({
       if (player) player.point += changedValue;
     },
     placeBet: (state, { player, bet, choice }: BetChoice) => {
-      var token = {
+      const token = {
         id: player.id,
         name: player.name,
         avatar: player.avatar,
@@ -114,7 +114,7 @@ export const store = createStore<State>({
       const result = getResult();
       commit("updateDice", result);
     },
-    placeBet({ commit, state }, { player, bet, choice }) {
+    placeBet({ commit, state }, { player, bet, choice }: BetChoice) {
       // Can only bet when waiting for bet
       if (state.status !== WAITING_FOR_BET) return;
 
@@ -125,6 +125,9 @@ export const store = createStore<State>({
       if (state.board[choice][player.id]) return;
 
       const existedPlayer = state.players[player.id];
+      if (existedPlayer.point === 0) {
+        return;
+      }
 
       // If player don't have enough point, bet all point
       let pointToBet = bet;

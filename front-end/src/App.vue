@@ -93,7 +93,7 @@
             </li>
             <li>
               Mỗi lần cháy túi sẽ được tặng
-              <b>5 đồng</b> để gỡ gạc
+              <b>4 đồng</b> để gỡ gạc
             </li>
             <li>
               Đặt cược bằng cách
