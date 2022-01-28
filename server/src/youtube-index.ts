@@ -14,6 +14,10 @@ let lastCommentId = "";
 let currentPageToken = "";
 const COMMENT_MAX_RESULT = 200;
 
+// WARNING: ACCESS_TOKEN is only available in 50 minutes
+// So in 40 minutes, reset the app and change to a new ACCESS_TOKEN
+// Wait until "sòng đang đóng" so nobody can bet
+
 function getNewComments(allComments: Comment[], lastCommentId: string) {
   if (!allComments || allComments.length === 0) return [];
 
