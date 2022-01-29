@@ -23,6 +23,8 @@ const io = new Server(server, {
   },
 });
 
+// SEEM NOT WORK BECAUSE OF A LOT OF FACEBOOK PERMISSION THINGS.....
+
 import HookProcessor from "./hookProcessor";
 const processor = new HookProcessor(io, "116529085375415_566172007077785");
 
