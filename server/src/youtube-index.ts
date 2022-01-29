@@ -5,7 +5,7 @@ import { Server } from "socket.io";
 import "dotenv/config";
 
 import { Comment } from "./models/comment";
-import { ACCESS_TOKEN } from "./../config/secret";
+import { YOUTUBE_ACCESS_TOKEN } from "./../config/secret";
 import HookProcessor from "./hookProcessor";
 
 const httpServer = createServer();
@@ -86,7 +86,7 @@ async function getLiveBroadcast() {
     "https://www.googleapis.com/youtube/v3/liveBroadcasts?mine=true&maxResults=50";
   const response = await axios.get<LiveBroadcastResponse>(url, {
     headers: {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      Authorization: `Bearer ${YOUTUBE_ACCESS_TOKEN}`,
     },
   });
   return response.data.items;
@@ -103,7 +103,7 @@ async function getLiveChat(liveChatId: string, pageToken = "") {
       pageToken,
     },
     headers: {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      Authorization: `Bearer ${YOUTUBE_ACCESS_TOKEN}`,
     },
   });
 
